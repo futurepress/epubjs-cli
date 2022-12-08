@@ -7,9 +7,12 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     {% if rights %}
     <dc:rights>{{ rights }}</dc:rights>
     {% endif %}
-    {% if rights %}
+    {% if creator %}
     <dc:creator>{{ creator }}</dc:creator>
     {% endif %}
+    {% for creator in creators %}
+    <dc:contributor>{{ creator.name }}</dc:contributor>
+    {% endfor %}
     {% for contrib in contributor %}
     <dc:contributor>{{ contrib }}</dc:contributor>
     {% endfor %}
@@ -39,26 +42,16 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     {% endfor %}
   </manifest>
   <spine>
-    <!-- Frontmater -->
     {% if cover %}
     <itemref idref="{{ cover.id }}" linear="no"/>
     {% endif %}
     {% if nav %}
     <itemref idref="{{ nav.id }}" linear="no"/>
     {% endif %}
-    <!-- Chapters -->
     {% for item in sections %}
     <itemref linear="yes" idref="{{ item.id }}"/>
     {% endfor %}
   </spine>
-  <!-- <guide>
-    {% if cover %}
-    <reference href="{{ cover.url }}" title="{{ cover.name }}" type="cover"/>
-    {% endif %}
-    {% if nav %}
-    <reference href="{{ nav.url }}" title="{{ nav.name }}" type="toc"/>
-    {% endif %}
-  </guide> -->
 </package>
 `;
 
