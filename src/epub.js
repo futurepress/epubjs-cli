@@ -1,4 +1,4 @@
-import { Manifest } from "epubjs";
+import { core, Manifest } from "epubjs";
 import JSZip from "jszip";
 import { Liquid } from "liquidjs";
 import path from "node:path";
@@ -36,13 +36,19 @@ class ManifestToEpub {
 		await this.manifest.opened;
 
 		this.data = {
+			id: this.manifest.id || core.uuid(),
 			manifest: [],
 			sections: []
 		};
 
 		for (const [key, value] of this.manifest.metadata) {
-			this.data[key] = value;
+			if (value) {
+				this.data[key] = value;
+			}
 		}
+
+		let hasNav = false;
+		let hasCoverImg = false;
 
 		for (const [key, value] of this.manifest.uniqueResources) {
 			let item = value.data;
@@ -57,12 +63,14 @@ class ManifestToEpub {
 				item.encoding = "application/xhtml+xml";
 			}
 
-			if (item.rel.includes("contents")) {
+			if (!hasNav && item.rel.includes("contents")) {
 				item.properties = ["nav"];
+				hasNav = true;
 			}
 
-			if (item.rel.includes("cover-image")) {
+			if (!hasCoverImg && item.rel.includes("cover-image")) {
 				item.properties = ["cover-image"];
+				hasCoverImg = true;
 			}
 
 			this.data.manifest.push(item);

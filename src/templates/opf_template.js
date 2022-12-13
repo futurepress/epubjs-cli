@@ -35,21 +35,21 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
   <manifest>
     {% for item in manifest %}
     {% if item.properties.length > 0 %}
-    <item id="{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" properties="{{ item.properties | join: " " }}" />
+    <item id="id_{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" properties="{{ item.properties | join: " " }}" />
     {% else %}
-    <item id="{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" />
+    <item id="id_{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" />
     {% endif %}
     {% endfor %}
   </manifest>
   <spine>
     {% if cover %}
-    <itemref idref="{{ cover.id }}" linear="no"/>
+    <itemref idref="id_{{ cover.id }}" linear="no"/>
     {% endif %}
     {% if nav %}
-    <itemref idref="{{ nav.id }}" linear="no"/>
+    <itemref idref="id_{{ nav.id }}" linear="no"/>
     {% endif %}
     {% for item in sections %}
-    <itemref linear="yes" idref="{{ item.id }}"/>
+    <itemref linear="yes" idref="id_{{ item.id }}"/>
     {% endfor %}
   </spine>
 </package>
