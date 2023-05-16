@@ -49,3 +49,30 @@ if (file) {
   writeFileSync("./mybook.epub", file);
 }
 ```
+## Publication Manifests
+
+A publication manifest is a JSON-LD serialized document that allows for expressing information about a digital publication, and providing URLs to the resource that publication requires. It's defined by the [W3C Publication Manifests](https://www.w3.org/TR/pub-manifest/) standard. It mostly maps nicely to elements in the Epub OPF XML document.
+
+## Adding Metadata
+
+The manifest can support any schema.org metadata but when converting to Epub there are a few important ones that will be included in the generated `package.opf`.
+
+* `dateModified` -> `dcterms:modified`
+* `id` -> `dc:identifier`
+* `inLanguage` -> `dc:language`
+* `dateModified` -> `dcterms:modified` 
+* `rights` -> `dc:rights`
+* `creators[]` -> `dc:creator`
+* `contributor[]` -> `dc:contributor`
+* `title` -> `dc:title`
+* `source` -> `dc:source`
+* `subject` -> `dc:subject`
+* `description` -> `dc:description`
+
+## Epub specific information
+
+* HTML items can include a `properties` array, which will be passed as spine item properties when converting to Epub.
+* HTML items in the resources object will be included in the Epub spine element as non-linear spine items.
+* `rel="cover"` -> identifies the cover spine item
+* `rel="cover-image"` -> identifies the Epub cover image url
+* `rel="contents"` -> identifies the Table of Contents / Nav for the Epub
