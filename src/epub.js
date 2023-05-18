@@ -45,6 +45,10 @@ class ManifestToEpub {
 			if (value) {
 				this.data[key] = value;
 			}
+			if (value == "date") {
+				this.data["datePublished"] = value;
+				this.data["dateModified"] = value;
+			}
 		}
 
 		let hasNav = false;
