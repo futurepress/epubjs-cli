@@ -8,13 +8,25 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     <dc:rights>{{ rights }}</dc:rights>
     {% endif %}
     {% if creator %}
+    {% if creator.first %}
+    <dc:creator>{{ creator.name }}</dc:creator>
+    {% else %}
     <dc:creator>{{ creator }}</dc:creator>
     {% endif %}
+    {% endif %}
     {% for creator in creators %}
-    <dc:contributor>{{ creator.name }}</dc:contributor>
+    {% if creator.first %}
+    <dc:creator>{{ creator.name }}</dc:creator>
+    {% else %}
+    <dc:creator>{{ creator }}</dc:creator>
+    {% endif %}
     {% endfor %}
     {% for contrib in contributor %}
+    {% if contrib.first %}
+    <dc:contributor>{{ contrib.name }}</dc:contributor>
+    {% else %}
     <dc:contributor>{{ contrib }}</dc:contributor>
+    {% endif %}
     {% endfor %}
     {% if title %}
     <dc:title>{{ title }}</dc:title>
@@ -35,21 +47,18 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
   <manifest>
     {% for item in manifest %}
     {% if item.properties.length > 0 %}
-    <item id="id_{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" properties="{{ item.properties | join: " " }}" />
+    <item id="{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" properties="{{ item.properties | join: " " }}" />
     {% else %}
-    <item id="id_{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" />
+    <item id="{{ item.id }}" href="{{ item.url }}" media-type="{{ item.encoding }}" />
     {% endif %}
     {% endfor %}
   </manifest>
   <spine>
-    {% if cover %}
-    <itemref idref="id_{{ cover.id }}" linear="no"/>
-    {% endif %}
-    {% if nav %}
-    <itemref idref="id_{{ nav.id }}" linear="no"/>
-    {% endif %}
+    {% for item in nonlinear %}
+    <itemref linear="no" idref="{{ item.id }}"/>
+    {% endfor %}
     {% for item in sections %}
-    <itemref linear="yes" idref="id_{{ item.id }}"/>
+    <itemref linear="yes" idref="{{ item.id }}"/>
     {% endfor %}
   </spine>
 </package>

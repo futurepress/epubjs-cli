@@ -80,6 +80,19 @@ class ManifestToEpub {
 			this.data.manifest.push(item);
 		}
 
+		for (const [, value] of this.manifest.resources) {
+			let item = value.data;
+
+			if (!item.encoding) {
+				item.encoding = mime.lookup(item.url);
+			}
+
+			if (item.encoding === "text/html" ||
+					item.encoding === "application/xhtml+xml") {
+				this.data.nonlinear.push(item);
+			}
+		}
+
 		for (const [, value] of this.manifest.readingOrder) {
 			this.data.sections.push(value.data);
 		}
