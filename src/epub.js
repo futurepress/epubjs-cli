@@ -9,6 +9,7 @@ import mime from "mime-types";
 import filerequest from "./filerequest.js";
 import OPF_TEMPLATE from "./templates/opf_template.js";
 import CONTAINER_TEMPLATE from "./templates/container_template.js";
+import { log } from "node:console";
 
 global.window = new JSDOM("").window;
 global.DOMParser = global.window.DOMParser;
@@ -32,6 +33,7 @@ class ManifestToEpub {
 
 	async create(manifestUrl) {
 		this.url = manifestUrl;
+
 		this.manifest = new Manifest(manifestUrl, filerequest);
 		await this.manifest.opened;
 
