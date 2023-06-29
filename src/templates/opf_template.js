@@ -8,21 +8,21 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     <dc:rights>{{ rights }}</dc:rights>
     {% endif %}
     {% if creator %}
-    {% if creator.first %}
+    {% if creator.name %}
     <dc:creator>{{ creator.name }}</dc:creator>
     {% else %}
     <dc:creator>{{ creator }}</dc:creator>
     {% endif %}
     {% endif %}
     {% for creator in creators %}
-    {% if creator.first %}
+    {% if creator.name %}
     <dc:creator>{{ creator.name }}</dc:creator>
     {% else %}
     <dc:creator>{{ creator }}</dc:creator>
     {% endif %}
     {% endfor %}
     {% for contrib in contributor %}
-    {% if contrib.first %}
+    {% if contrib.name %}
     <dc:contributor>{{ contrib.name }}</dc:contributor>
     {% else %}
     <dc:contributor>{{ contrib }}</dc:contributor>
