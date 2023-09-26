@@ -70,12 +70,20 @@ class ManifestToEpub {
 			}
 
 			if (!hasNav && item.rel.includes("contents")) {
-				item.properties = ["nav"];
+				if (item.properties) {
+					item.properties.push("nav");
+				} else {
+					item.properties = ["nav"];
+				}
 				hasNav = true;
 			}
 
 			if (!hasCoverImg && item.rel.includes("cover-image")) {
-				item.properties = ["cover-image"];
+				if (item.properties) {
+					item.properties.push("cover-image");
+				} else {
+					item.properties = ["cover-image"];
+				}
 				hasCoverImg = true;
 			}
 
