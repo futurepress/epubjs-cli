@@ -9,7 +9,6 @@ import mime from "mime-types";
 import filerequest from "./filerequest.js";
 import OPF_TEMPLATE from "./templates/opf_template.js";
 import CONTAINER_TEMPLATE from "./templates/container_template.js";
-import { log } from "node:console";
 
 global.window = new JSDOM("").window;
 global.DOMParser = global.window.DOMParser;
@@ -40,16 +39,13 @@ class ManifestToEpub {
 		this.data = {
 			id: this.manifest.id || core.uuid(),
 			manifest: [],
-			sections: []
+			sections: [],
+			nonlinear: []
 		};
 
 		for (const [key, value] of this.manifest.metadata) {
 			if (value) {
 				this.data[key] = value;
-			}
-			if (value == "date") {
-				this.data["datePublished"] = value;
-				this.data["dateModified"] = value;
 			}
 		}
 

@@ -12,7 +12,6 @@
   "main": "./src/index.js",
   "exports": {
     "import": "./src/index.js",
-    "require": "./src/index.js",
     "default": "./src/index.js"
   },
   "bin": "./src/cli.js",
@@ -21,18 +20,20 @@
     "lint": "eslint src",
     "test": "npm run lint"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
-    "@xmldom/xmldom": "^0.8.6",
     "commander": "^9.3.0",
     "epubjs": "^0.5.0-alpha.3",
-    "eslint": "^8.29.0",
-    "express": "^4.18.1",
     "jsdom": "^20.0.3",
     "jszip": "^3.10.1",
     "liquidjs": "^10.1.0",
     "mime-types": "^2.1.35",
-    "node-fetch": "^3.2.5",
     "ora": "^6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.29.0"
   },
   "files": [
     "dist",

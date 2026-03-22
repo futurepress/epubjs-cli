@@ -27,19 +27,16 @@ program.command("create")
 			process.exit(1);
 		}
 
-		if (input) {
+		if ([".json", ".jsonld"].indexOf(extname(input)) === -1) {
+			console.error("Must pass a json or jsonld file as input");
+			process.exit(1);
+		}
 
-			if ([".json", ".jsonld"].indexOf(extname(input)) === -1) {
-				console.error("Must pass a json or jsonld file as input");
-				process.exit(1);
-			}
-
-			try {
-				accessSync(input, fs.F_OK);
-			} catch (e) {
-				console.error("Input cannot be found", e);
-				process.exit(1);
-			}
+		try {
+			accessSync(input, fs.F_OK);
+		} catch (e) {
+			console.error("Input cannot be found", e);
+			process.exit(1);
 		}
 
 		if (typeof(options.output) === "string") {
@@ -57,24 +54,29 @@ program.command("create")
 		spinner.start("Converting: " + input);
 
 		(async () => {
-			let url = pathToFileURL(input).href;
+			try {
+				let url = pathToFileURL(input).href;
 
-			let epub = await new ManifestToEpub(url);
+				let epub = await new ManifestToEpub(url);
 
-			let file = await epub.save();
+				let file = await epub.save();
 
-			spinner.succeed("Generated");
+				spinner.succeed("Generated");
 
-			if (file && output) {
-				writeFile(output, file, (err) => {
-					if (err) throw err;
-					spinner.succeed("Saved to " + output);
-					process.exit(0);
-				});
-			} else if (file) {
-				process.stdout.write(file);
+				if (file && output) {
+					writeFile(output, file, (err) => {
+						if (err) throw err;
+						spinner.succeed("Saved to " + output);
+						process.exit(0);
+					});
+				} else if (file) {
+					process.stdout.write(file);
+				}
+			} catch (err) {
+				spinner.fail("Failed to create EPUB");
+				console.error(err);
+				process.exit(1);
 			}
-
 		})();
 	});
 
