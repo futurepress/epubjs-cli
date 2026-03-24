@@ -6,7 +6,7 @@
   "homepage": "https://futurepress.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/futurepress/epubjs-cli.git"
+    "url": "git+https://github.com/futurepress/epubjs-cli.git"
   },
   "type": "module",
   "main": "./src/index.js",
@@ -14,7 +14,9 @@
     "import": "./src/index.js",
     "default": "./src/index.js"
   },
-  "bin": "./src/cli.js",
+  "bin": {
+    "epubjs-cli": "src/cli.js"
+  },
   "scripts": {
     "start": "./src/cli.js",
     "lint": "eslint src",
