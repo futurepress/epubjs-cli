@@ -2,11 +2,43 @@
 import { Command } from "commander";
 import ora from "ora";
 
-import fs, { writeFile, accessSync } from "node:fs";
-import { pathToFileURL } from "node:url";
+import fs, { accessSync } from "node:fs";
+import { pathToFileURL, fileURLToPath } from "node:url";
 import path, { extname } from "node:path";
+import { execFile } from "node:child_process";
 
 import ManifestToEpub from "../src/epub.js";
+
+function runAceCheck(epubPath, spinner) {
+	return new Promise((resolve, reject) => {
+		let aceBin = path.resolve(
+			path.dirname(fileURLToPath(import.meta.url)),
+			"../node_modules/.bin/ace"
+		);
+
+		spinner.start("Running accessibility check: " + epubPath);
+
+		execFile(aceBin, [epubPath], (error, stdout, stderr) => {
+			if (error) {
+				spinner.fail("Accessibility check failed");
+				if (stderr) {
+					console.error(stderr);
+				}
+				if (stdout) {
+					console.error(stdout);
+				}
+				reject(error);
+				return;
+			}
+
+			spinner.succeed("Accessibility check passed");
+			if (stdout) {
+				process.stdout.write(stdout);
+			}
+			resolve();
+		});
+	});
+}
 
 const program = new Command();
 
@@ -18,6 +50,7 @@ program
 program.command("create")
 	.argument("<inputPath>", "Input path")
 	.option("-o, --output [output]", "Output")
+	.option("-c, --check", "Accessibility check")
 	.action((input, options) => {
 		let dir = process.cwd();
 		let output;
@@ -64,11 +97,14 @@ program.command("create")
 				spinner.succeed("Generated");
 
 				if (file && output) {
-					writeFile(output, file, (err) => {
-						if (err) throw err;
-						spinner.succeed("Saved to " + output);
-						process.exit(0);
-					});
+					await fs.promises.writeFile(output, file);
+					spinner.succeed("Saved to " + output);
+
+					if (options.check) {
+						await runAceCheck(output, spinner);
+					}
+
+					process.exit(0);
 				} else if (file) {
 					process.stdout.write(file);
 				}
@@ -80,6 +116,33 @@ program.command("create")
 		})();
 	});
 
+program.command("check")
+	.argument("<epubPath>", "Path to EPUB file")
+	.action((epubPath) => {
+		try {
+			accessSync(epubPath, fs.F_OK);
+		} catch (e) {
+			console.error("EPUB file cannot be found", e);
+			process.exit(1);
+		}
+
+		if (extname(epubPath) !== ".epub") {
+			console.error("Must pass an .epub file");
+			process.exit(1);
+		}
+
+		const spinner = ora({
+			spinner: "circleQuarters"
+		});
+
+		(async () => {
+			try {
+				await runAceCheck(path.resolve(epubPath), spinner);
+				process.exit(0);
+			} catch (err) {
+				process.exit(1);
+			}
+		})();
+	});
+
 program.parse(process.argv);
-
-

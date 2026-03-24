@@ -43,6 +43,37 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     {% if description %}
     <dc:description>{{ description | escape_once }}</dc:description>
     {% endif %}
+    {% if accessMode %}
+    <meta property="schema:accessMode">{{ accessMode }}</meta>
+    {% else %}
+    <meta property="schema:accessMode">textual</meta>
+    <meta property="schema:accessMode">visual</meta>
+    {% endif %}
+    {% if accessModeSufficient %}
+    <meta property="schema:accessModeSufficient">{{ accessModeSufficient }}</meta>
+    {% else %}
+    <meta property="schema:accessModeSufficient">textual,visual</meta>
+    <meta property="schema:accessModeSufficient">textual</meta>
+    {% endif %}
+    {% if accessibilityFeature %}
+    {% for feature in accessibilityFeature %}
+    <meta property="schema:accessibilityFeature">{{ feature }}</meta>
+    {% endfor %}
+    {% else %}
+    <meta property="schema:accessibilityFeature">structuralNavigation</meta>
+    {% endif %}
+    {% if accessibilityHazard %}
+    {% for hazard in accessibilityHazard %}
+    <meta property="schema:accessibilityHazard">{{ hazard }}</meta>
+    {% endfor %}
+    {% else %}
+    <meta property="schema:accessibilityHazard">none</meta>
+    {% endif %}
+    {% if accessibilitySummary %}
+    <meta property="schema:accessibilitySummary">{{ accessibilitySummary }}</meta>
+    {% else %}
+    <meta property="schema:accessibilitySummary">This publication has not been evaluated for accessibility.</meta>
+    {% endif %}
   </metadata>
   <manifest>
     {% for item in manifest %}

@@ -145,6 +145,14 @@ class ManifestToEpub {
 
 		const doc = parser.parseFromString(content, "text/html");
 
+		const lang = this.data.inLanguage || "en-US";
+		if (!doc.documentElement.getAttribute("lang")) {
+			doc.documentElement.setAttribute("lang", lang);
+		}
+		if (!doc.documentElement.getAttribute("xml:lang")) {
+			doc.documentElement.setAttribute("xml:lang", lang);
+		}
+
 		const pi = doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
 		doc.insertBefore(pi, doc.firstChild);
 

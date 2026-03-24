@@ -11,7 +11,23 @@ npm install -g epubjs-cli
 ## Creating an ePub
 
 ```
-epubs-cli create ./path/to/manifest.jsonld -o mybook.epub
+epubjs-cli create ./path/to/manifest.jsonld -o mybook.epub
+```
+
+### With accessibility check
+
+Run a [DAISY Ace](https://daisy.github.io/ace/) accessibility check after creating the ePub:
+
+```
+epubjs-cli create ./path/to/manifest.jsonld -o mybook.epub --check
+```
+
+## Checking accessibility
+
+Run an accessibility check on an existing ePub file:
+
+```
+epubjs-cli check mybook.epub
 ```
 
 ## Options
@@ -26,8 +42,16 @@ Options:
   -h, --help                    display help for command
 
 Commands:
-  create [options] <inputPath>
+  create [options] <inputPath>  Create an Epub from a manifest
+  check <epubPath>              Run DAISY Ace accessibility check
   help [command]                display help for command
+```
+
+### Create options
+
+```
+  -o, --output [output]  Output file path
+  -c, --check            Run accessibility check with DAISY Ace after creating
 ```
 ## Using with Nodejs
 
