@@ -44,7 +44,9 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     <dc:description>{{ description | escape_once }}</dc:description>
     {% endif %}
     {% if accessMode %}
-    <meta property="schema:accessMode">{{ accessMode }}</meta>
+    {% for mode in accessMode %}
+    <meta property="schema:accessMode">{{ mode }}</meta>
+    {% endfor %}
     {% else %}
     <meta property="schema:accessMode">textual</meta>
     <meta property="schema:accessMode">visual</meta>
