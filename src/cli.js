@@ -16,6 +16,15 @@ function runAceCheck(epubPath, spinner) {
 			"../node_modules/.bin/ace"
 		);
 
+		try {
+			accessSync(aceBin, fs.F_OK);
+		} catch (e) {
+			reject(new Error(
+				"@daisy/ace is not installed. Install it with: npm install @daisy/ace"
+			));
+			return;
+		}
+
 		spinner.start("Running accessibility check: " + epubPath);
 
 		execFile(aceBin, [epubPath], (error, stdout, stderr) => {

@@ -16,7 +16,13 @@ epubjs-cli create ./path/to/manifest.jsonld -o mybook.epub
 
 ### With accessibility check
 
-Run a [DAISY Ace](https://daisy.github.io/ace/) accessibility check after creating the ePub:
+Run a [DAISY Ace](https://daisy.github.io/ace/) accessibility check after creating the ePub. Ace must be installed first with:
+
+```
+npm install @daisy/ace
+```
+
+Then use the `--check` flag:
 
 ```
 epubjs-cli create ./path/to/manifest.jsonld -o mybook.epub --check
@@ -24,7 +30,7 @@ epubjs-cli create ./path/to/manifest.jsonld -o mybook.epub --check
 
 ## Checking accessibility
 
-Run an accessibility check on an existing ePub file:
+Run an accessibility check on an existing ePub file (requires `@daisy/ace`):
 
 ```
 epubjs-cli check mybook.epub
@@ -53,6 +59,7 @@ Commands:
   -o, --output [output]  Output file path
   -c, --check            Run accessibility check with DAISY Ace after creating
 ```
+
 ## Using with Nodejs
 
 Input must be a file url.
@@ -73,6 +80,7 @@ if (file) {
   writeFileSync("./mybook.epub", file);
 }
 ```
+
 ## Publication Manifests
 
 A publication manifest is a JSON-LD serialized document that allows for expressing information about a digital publication, and providing URLs to the resource that publication requires. It's defined by the [W3C Publication Manifests](https://www.w3.org/TR/pub-manifest/) standard. It mostly maps nicely to elements in the Epub OPF XML document.
@@ -81,22 +89,22 @@ A publication manifest is a JSON-LD serialized document that allows for expressi
 
 The manifest can support any schema.org metadata but when converting to Epub there are a few important ones that will be included in the generated `package.opf`.
 
-* `dateModified` -> `dcterms:modified`
-* `id` -> `dc:identifier`
-* `inLanguage` -> `dc:language`
-* `dateModified` -> `dcterms:modified` 
-* `rights` -> `dc:rights`
-* `creators[]` -> `dc:creator`
-* `contributor[]` -> `dc:contributor`
-* `title` -> `dc:title`
-* `source` -> `dc:source`
-* `subject` -> `dc:subject`
-* `description` -> `dc:description`
+- `dateModified` -> `dcterms:modified`
+- `id` -> `dc:identifier`
+- `inLanguage` -> `dc:language`
+- `dateModified` -> `dcterms:modified`
+- `rights` -> `dc:rights`
+- `creators[]` -> `dc:creator`
+- `contributor[]` -> `dc:contributor`
+- `title` -> `dc:title`
+- `source` -> `dc:source`
+- `subject` -> `dc:subject`
+- `description` -> `dc:description`
 
 ## Epub specific information
 
-* HTML items can include a `properties` array, which will be passed as spine item properties when converting to Epub.
-* HTML items in the resources object will be included in the Epub spine element as non-linear spine items.
-* `rel="cover"` -> identifies the cover spine item
-* `rel="cover-image"` -> identifies the Epub cover image url
-* `rel="contents"` -> identifies the Table of Contents / Nav for the Epub
+- HTML items can include a `properties` array, which will be passed as spine item properties when converting to Epub.
+- HTML items in the resources object will be included in the Epub spine element as non-linear spine items.
+- `rel="cover"` -> identifies the cover spine item
+- `rel="cover-image"` -> identifies the Epub cover image url
+- `rel="contents"` -> identifies the Table of Contents / Nav for the Epub
