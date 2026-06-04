@@ -52,7 +52,9 @@ const OPF_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     <meta property="schema:accessMode">visual</meta>
     {% endif %}
     {% if accessModeSufficient %}
-    <meta property="schema:accessModeSufficient">{{ accessModeSufficient }}</meta>
+    {% for mode in accessModeSufficient %}
+    <meta property="schema:accessModeSufficient">{{ mode }}</meta>
+    {% endfor %}
     {% else %}
     <meta property="schema:accessModeSufficient">textual,visual</meta>
     <meta property="schema:accessModeSufficient">textual</meta>
